@@ -1,12 +1,18 @@
 package com.hcsc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 
+import com.hcsc.cssui.model.Liability;
+import com.hcsc.cssui.model.type.CorporateEntityCode;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -36,6 +42,27 @@ public class MyUI extends UI {
         });
         
         layout.addComponents(name, button);
+        
+        List<Liability> liabilityList = new ArrayList<>();
+        for(long i=0;i<50;i++){
+        	Liability liability = new Liability();
+        	liability.setId(i);
+        	liability.setCorpEntCd(CorporateEntityCode.Texas);
+        	liability.setHcscSubscriber("0000000"+i);
+        	liability.setQhpid("76002"+i+"TX1");
+        	liability.setAmount(new Double(i));
+        	liabilityList.add(liability);
+        }
+        
+        Grid<Liability> grid = new Grid<>();
+        grid.setItems(liabilityList);
+        grid.addColumn(Liability::getId).setCaption("Claim Id");
+        grid.addColumn(Liability::getCorpEntCd).setCaption("Corp Ent Cd");
+        grid.addColumn(Liability::getHcscSubscriber).setCaption("Hcsc Sub.");
+        grid.addColumn(Liability::getQhpid).setCaption("Qhpid");
+        grid.addColumn(Liability::getAmount).setCaption("Amount");
+        
+        layout.addComponent(grid);
         
         setContent(layout);
     }
